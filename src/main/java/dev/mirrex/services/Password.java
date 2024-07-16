@@ -12,7 +12,7 @@ public class Password {
         password = scanner.nextLine().trim();
 
         while (true) {
-            System.out.println("Please, repeat the password: ");
+            System.out.print("Please, repeat the password: ");
             String repeatedPassword = scanner.nextLine().trim();
             if (isPasswordCorrect(repeatedPassword)) {
                 break;
