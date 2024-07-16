@@ -1,4 +1,4 @@
-package dev.mirrex;
+package dev.mirrex.services;
 
 public class Values {
 

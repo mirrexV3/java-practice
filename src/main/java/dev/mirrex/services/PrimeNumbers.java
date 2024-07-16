@@ -1,4 +1,4 @@
-package dev.mirrex;
+package dev.mirrex.services;
 
 import java.util.List;
 import java.util.Scanner;
@@ -8,12 +8,15 @@ import java.util.stream.IntStream;
 public class PrimeNumbers {
 
     public static void primeNumbersSequence() {
-        Scanner scanner = new Scanner(System.in);
+        int startSequence;
+        int endSequence;
+        try (Scanner scanner = new Scanner(System.in)) {
 
-        System.out.print("Please, enter min number range: ");
-        int startSequence = scanner.nextInt();
-        System.out.print("Please, enter max number range: ");
-        int endSequence = scanner.nextInt();
+            System.out.print("Please, enter min number range: ");
+            startSequence = scanner.nextInt();
+            System.out.print("Please, enter max number range: ");
+            endSequence = scanner.nextInt();
+        }
 
         List<Integer> primeNumbers = IntStream
                 .rangeClosed(startSequence, endSequence)
