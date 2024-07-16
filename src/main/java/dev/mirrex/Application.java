@@ -1,9 +1,6 @@
 package dev.mirrex;
 
-import dev.mirrex.services.Numbers;
-import dev.mirrex.services.PrimeNumbers;
-import dev.mirrex.services.ShoppingCart;
-import dev.mirrex.services.Values;
+import dev.mirrex.services.*;
 
 import java.util.Scanner;
 
@@ -17,6 +14,7 @@ public class Application {
                     2 - What number is greater
                     3 - Prime numbers sequence
                     4 - Shopping cart
+                    5 - Checking password correctness
                     """);
 
             System.out.print("Your choice: ");
@@ -34,6 +32,9 @@ public class Application {
                     break;
                 case "4":
                     ShoppingCart.displayCart();
+                    break;
+                case "5":
+                    Password.requestUserPassword();
                     break;
                 default:
                     System.out.println("Nonexistent selection. Please, try again.");
