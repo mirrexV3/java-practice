@@ -21,7 +21,7 @@
                 <artifactId>maven-checkstyle-plugin</artifactId>
                 <version>3.4.0</version>
                 <configuration>
-                    <configLocation>config/checkstyle/checkstyle-dunice-academy.xml</configLocation>
+                    <configLocation>config/checkstyle-dunice-academy.xml</configLocation>
                 </configuration>
                 <executions>
                     <execution>
