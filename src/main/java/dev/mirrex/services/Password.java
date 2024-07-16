@@ -7,15 +7,16 @@ public class Password {
     private static String password;
 
     public static void requestUserPassword() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Please, enter password: ");
-        password = scanner.nextLine().trim();
+        try (Scanner scanner = new Scanner(System.in)) {
+            System.out.print("Please, enter password: ");
+            password = scanner.nextLine().trim();
 
-        while (true) {
-            System.out.print("Please, repeat the password: ");
-            String repeatedPassword = scanner.nextLine().trim();
-            if (isPasswordCorrect(repeatedPassword)) {
-                break;
+            while (true) {
+                System.out.print("Please, repeat the password: ");
+                String repeatedPassword = scanner.nextLine().trim();
+                if (isPasswordCorrect(repeatedPassword)) {
+                    break;
+                }
             }
         }
 
