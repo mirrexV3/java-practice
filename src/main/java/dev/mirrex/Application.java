@@ -5,7 +5,6 @@ import dev.mirrex.services.Password;
 import dev.mirrex.services.PrimeNumbers;
 import dev.mirrex.services.ShoppingCart;
 import dev.mirrex.services.Values;
-
 import java.util.Scanner;
 
 public class Application {
