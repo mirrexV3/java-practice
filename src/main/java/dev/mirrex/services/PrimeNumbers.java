@@ -1,9 +1,8 @@
 package dev.mirrex.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class PrimeNumbers {
 
@@ -18,11 +17,13 @@ public class PrimeNumbers {
             endSequence = scanner.nextInt();
         }
 
-        List<Integer> primeNumbers = IntStream
-                .rangeClosed(startSequence, endSequence)
-                .filter(PrimeNumbers::isPrime)
-                .boxed()
-                .collect(Collectors.toList());
+        List<Integer> primeNumbers = new ArrayList<>();
+        for (int i = startSequence; i <= endSequence; i++) {
+            if (isPrime(i)) {
+                Integer integer = i;
+                primeNumbers.add(integer);
+            }
+        }
 
         System.out.println(primeNumbers);
     }
