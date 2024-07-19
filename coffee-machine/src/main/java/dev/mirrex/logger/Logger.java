@@ -1,4 +1,4 @@
-package dev.mirrex;
+package dev.mirrex.logger;
 
 import java.util.ArrayList;
 import java.util.List;

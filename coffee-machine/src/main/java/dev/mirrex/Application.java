@@ -1,5 +1,10 @@
 package dev.mirrex;
 
+import dev.mirrex.drink.DrinkType;
+import dev.mirrex.engine.CoffeeMachine;
+import dev.mirrex.exception.OverflowException;
+import dev.mirrex.logger.Logger;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;

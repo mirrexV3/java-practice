@@ -1,4 +1,4 @@
-package dev.mirrex;
+package dev.mirrex.drink;
 
 /**
  * Enum для типов напитков.

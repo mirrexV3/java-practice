@@ -1,4 +1,4 @@
-package dev.mirrex;
+package dev.mirrex.exception;
 
 /**
  * Исключение для случаев переполнения резервуаров.
