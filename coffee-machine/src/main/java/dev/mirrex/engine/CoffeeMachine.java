@@ -3,11 +3,15 @@ package dev.mirrex.engine;
 import dev.mirrex.drink.DrinkType;
 import dev.mirrex.exception.OverflowException;
 import dev.mirrex.logger.Logger;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
+import static dev.mirrex.drink.DrinkType.getCappuccinoCoffeeBeans;
+import static dev.mirrex.drink.DrinkType.getCappuccinoMilk;
+import static dev.mirrex.drink.DrinkType.getCappuccinoWater;
+import static dev.mirrex.drink.DrinkType.getEspressoCoffeeBeans;
+import static dev.mirrex.drink.DrinkType.getEspressoWater;
+import static dev.mirrex.drink.DrinkType.getRECIPES;
 
 public class CoffeeMachine {
 
@@ -18,17 +22,6 @@ public class CoffeeMachine {
     private static final int MAX_COFFEE_BEANS = 200;
 
     private static final int MAX_CLEAN_LIMIT = 10;
-
-    private static final int ESPRESSO_WATER = 50;
-
-    private static final int ESPRESSO_COFFEE_BEANS = 10;
-
-    private static final int CAPPUCCINO_WATER = 100;
-
-    private static final int CAPPUCCINO_MILK = 50;
-
-    private static final int CAPPUCCINO_COFFEE_BEANS = 15;
-
 
     private static int waterLevel;
 
@@ -42,9 +35,7 @@ public class CoffeeMachine {
 
     private static boolean needsCleaning;
 
-    private static final Map<DrinkType, String> RECIPES = new HashMap<>();
-
-    private static List<String> profiles = new ArrayList<>();
+    private static final List<String> profiles = new ArrayList<>();
 
     public static List<String> getProfiles() {
         return profiles;
@@ -52,13 +43,6 @@ public class CoffeeMachine {
 
     public static void setProfile(String profile) {
         profiles.add(profile);
-    }
-
-    static {
-        RECIPES.put(DrinkType.ESPRESSO, "Espresso Recipe: " + ESPRESSO_WATER + "ml water, " +
-                " " + ESPRESSO_COFFEE_BEANS + "g coffee beans.");
-        RECIPES.put(DrinkType.CAPPUCCINO, "Cappuccino Recipe: " + CAPPUCCINO_WATER + "ml water, " +
-                " " + CAPPUCCINO_MILK + "ml milk, " + CAPPUCCINO_COFFEE_BEANS + "g coffee beans.");
     }
 
     public static void turnOn() {
@@ -75,7 +59,7 @@ public class CoffeeMachine {
         if (amount <= 0) {
             throw new IllegalArgumentException("Amount must be positive.");
         }
-        if (waterLevel + amount > MAX_WATER_CAPACITY) {
+        if (waterLevel + amount > getMaxWaterCapacity()) {
             throw new OverflowException("Water overflow.");
         }
         waterLevel += amount;
@@ -86,7 +70,7 @@ public class CoffeeMachine {
         if (amount <= 0) {
             throw new IllegalArgumentException("Amount must be positive.");
         }
-        if (milkLevel + amount > MAX_MILK_CAPACITY) {
+        if (milkLevel + amount > getMaxMilkCapacity()) {
             throw new OverflowException("Milk overflow.");
         }
         milkLevel += amount;
@@ -97,7 +81,7 @@ public class CoffeeMachine {
         if (amount <= 0) {
             throw new IllegalArgumentException("Amount must be positive.");
         }
-        if (coffeeBeans + amount > MAX_COFFEE_BEANS) {
+        if (coffeeBeans + amount > getMaxCoffeeBeans()) {
             throw new OverflowException("Coffee beans overflow.");
         }
         coffeeBeans += amount;
@@ -139,32 +123,32 @@ public class CoffeeMachine {
         if (cups <= 0) {
             throw new IllegalArgumentException("Number of cups must be positive.");
         }
-        if (dirtyCount >= MAX_CLEAN_LIMIT) {
+        if (dirtyCount >= getMaxCleanLimit()) {
             needsCleaning = true;
             throw new IllegalStateException("Machine needs cleaning.");
         }
     }
 
     private static void makeEspresso(int cups) throws IllegalArgumentException {
-        if (waterLevel < ESPRESSO_WATER * cups || coffeeBeans < ESPRESSO_COFFEE_BEANS * cups) {
+        if (waterLevel < getEspressoWater() * cups || coffeeBeans < getEspressoCoffeeBeans() * cups) {
             throw new IllegalArgumentException("Not enough ingredients for Espresso.");
         }
-        waterLevel -= ESPRESSO_WATER * cups;
-        coffeeBeans -= ESPRESSO_COFFEE_BEANS * cups;
+        waterLevel -= getEspressoWater() * cups;
+        coffeeBeans -= getEspressoCoffeeBeans() * cups;
     }
 
     private static void makeCappuccino(int cups) throws IllegalArgumentException {
-        if (waterLevel < CAPPUCCINO_WATER * cups || milkLevel < CAPPUCCINO_MILK *
-                cups || coffeeBeans < CAPPUCCINO_COFFEE_BEANS * cups) {
+        if (waterLevel < getCappuccinoWater() * cups || milkLevel < getCappuccinoMilk() *
+                cups || coffeeBeans < getCappuccinoCoffeeBeans() * cups) {
             throw new IllegalArgumentException("Not enough ingredients for Cappuccino.");
         }
-        waterLevel -= CAPPUCCINO_WATER * cups;
-        milkLevel -= CAPPUCCINO_MILK * cups;
-        coffeeBeans -= CAPPUCCINO_COFFEE_BEANS * cups;
+        waterLevel -= getCappuccinoWater() * cups;
+        milkLevel -= getCappuccinoMilk() * cups;
+        coffeeBeans -= getCappuccinoCoffeeBeans() * cups;
     }
 
     public static String getRecipe(DrinkType type) {
-        return RECIPES.get(type);
+        return getRECIPES().get(type);
     }
 
     public static int getWaterLevel() {
@@ -186,4 +170,25 @@ public class CoffeeMachine {
     public static boolean needsCleaning() {
         return needsCleaning;
     }
+
+    public static int getMaxCoffeeBeans() {
+        return MAX_COFFEE_BEANS;
+    }
+
+    public static int getMaxWaterCapacity() {
+        return MAX_WATER_CAPACITY;
+    }
+
+    public static int getMaxCleanLimit() {
+        return MAX_CLEAN_LIMIT;
+    }
+
+    public static int getMaxMilkCapacity() {
+        return MAX_MILK_CAPACITY;
+    }
+
+    public static int getDirtyCount() {
+        return dirtyCount;
+    }
+
 }
