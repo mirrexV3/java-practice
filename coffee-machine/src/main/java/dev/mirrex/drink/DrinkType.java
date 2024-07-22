@@ -18,7 +18,7 @@ public enum DrinkType {
 
     private static final Map<DrinkType, String> RECIPES = new HashMap<>();
 
-    public static Map<DrinkType, String> getRECIPES() {
+    public static Map<DrinkType, String> getRecipes() {
         return RECIPES;
     }
 

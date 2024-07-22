@@ -11,7 +11,7 @@ import static dev.mirrex.drink.DrinkType.getCappuccinoMilk;
 import static dev.mirrex.drink.DrinkType.getCappuccinoWater;
 import static dev.mirrex.drink.DrinkType.getEspressoCoffeeBeans;
 import static dev.mirrex.drink.DrinkType.getEspressoWater;
-import static dev.mirrex.drink.DrinkType.getRECIPES;
+import static dev.mirrex.drink.DrinkType.getRecipes;
 
 public class CoffeeMachine {
 
@@ -148,7 +148,7 @@ public class CoffeeMachine {
     }
 
     public static String getRecipe(DrinkType type) {
-        return getRECIPES().get(type);
+        return getRecipes().get(type);
     }
 
     public static int getWaterLevel() {
