@@ -247,18 +247,25 @@ public class Application {
     private static void addProfile() {
         System.out.print("Введите имя профиля: ");
         String profileName = SCANNER.next();
-        Map<DrinkType, Integer> drinks = new HashMap<>();
-        System.out.println("Введите напитки для профиля (1 - Эспрессо, 2 - Капучино):");
-        for (int i = 0; i < 3; i++) {
-            System.out.print("Напиток " + (i + 1) + ": ");
-            int drinkChoice = SCANNER.nextInt();
-            DrinkType type = (drinkChoice == 1) ? DrinkType.ESPRESSO : DrinkType.CAPPUCCINO;
-            System.out.print("Количество кружек: ");
-            int cups = SCANNER.nextInt();
-            drinks.put(type, cups);
+
+        if (CoffeeMachine.getProfiles().contains(profileName)) {
+            System.out.println("Профиль уже существует");
+        } else {
+            Map<DrinkType, Integer> drinks = new HashMap<>();
+            System.out.println("Введите напитки для профиля (1 - Эспрессо, 2 - Капучино):");
+            for (int i = 0; i < 3; i++) {
+                System.out.print("Напиток " + (i + 1) + ": ");
+                int drinkChoice = SCANNER.nextInt();
+                DrinkType type = (drinkChoice == 1) ? DrinkType.ESPRESSO : DrinkType.CAPPUCCINO;
+                System.out.print("Количество кружек: ");
+                int cups = SCANNER.nextInt();
+                drinks.put(type, cups);
+            }
+
+            CoffeeMachine.setProfile(profileName);
+            Logger.log("Profile added: " + profileName + " with drinks " + drinks);
+            System.out.println("Профиль добавлен.");
         }
-        CoffeeMachine.addProfile(profileName, drinks);
-        System.out.println("Профиль добавлен.");
     }
 
     private static void printRecipe() {

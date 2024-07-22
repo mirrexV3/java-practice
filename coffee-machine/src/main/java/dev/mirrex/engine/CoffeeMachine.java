@@ -4,34 +4,32 @@ import dev.mirrex.drink.DrinkType;
 import dev.mirrex.exception.OverflowException;
 import dev.mirrex.logger.Logger;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-/**
- * Класс, представляющий кофемашину.
- */
 public class CoffeeMachine {
-    // Константы для максимальных значений
-    private static final int MAX_WATER_CAPACITY = 1000; // мл
 
-    private static final int MAX_MILK_CAPACITY = 500; // мл
+    private static final int MAX_WATER_CAPACITY = 1000;
 
-    private static final int MAX_COFFEE_BEANS = 200; // граммы
+    private static final int MAX_MILK_CAPACITY = 500;
 
-    private static final int MAX_CLEAN_LIMIT = 10; // кружек
+    private static final int MAX_COFFEE_BEANS = 200;
 
-    // Константы для рецептов напитков
-    private static final int ESPRESSO_WATER = 50; // мл на 1 эспрессо
+    private static final int MAX_CLEAN_LIMIT = 10;
 
-    private static final int ESPRESSO_COFFEE_BEANS = 10; // граммы на 1 эспрессо
+    private static final int ESPRESSO_WATER = 50;
 
-    private static final int CAPPUCCINO_WATER = 100; // мл на 1 капучино
+    private static final int ESPRESSO_COFFEE_BEANS = 10;
 
-    private static final int CAPPUCCINO_MILK = 50; // мл на 1 капучино
+    private static final int CAPPUCCINO_WATER = 100;
 
-    private static final int CAPPUCCINO_COFFEE_BEANS = 15; // граммы на 1 капучино
+    private static final int CAPPUCCINO_MILK = 50;
 
-    // Уровни ингредиентов
+    private static final int CAPPUCCINO_COFFEE_BEANS = 15;
+
+
     private static int waterLevel;
 
     private static int milkLevel;
@@ -46,6 +44,16 @@ public class CoffeeMachine {
 
     private static final Map<DrinkType, String> RECIPES = new HashMap<>();
 
+    private static List<String> profiles = new ArrayList<>();
+
+    public static List<String> getProfiles() {
+        return profiles;
+    }
+
+    public static void setProfile(String profile) {
+        profiles.add(profile);
+    }
+
     static {
         RECIPES.put(DrinkType.ESPRESSO, "Espresso Recipe: " + ESPRESSO_WATER + "ml water, " +
                 " " + ESPRESSO_COFFEE_BEANS + "g coffee beans.");
@@ -53,28 +61,16 @@ public class CoffeeMachine {
                 " " + CAPPUCCINO_MILK + "ml milk, " + CAPPUCCINO_COFFEE_BEANS + "g coffee beans.");
     }
 
-    /**
-     * Включает кофемашину.
-     */
     public static void turnOn() {
         isOn = true;
         Logger.log("Coffee machine turned on.");
     }
 
-    /**
-     * Выключает кофемашину.
-     */
     public static void turnOff() {
         isOn = false;
         Logger.log("Coffee machine turned off.");
     }
 
-    /**
-     * Добавляет воду в кофемашину.
-     *
-     * @param amount Количество воды в миллилитрах
-     * @throws OverflowException Если количество воды превышает максимально допустимый уровень
-     */
     public static void addWater(int amount) throws OverflowException {
         if (amount <= 0) {
             throw new IllegalArgumentException("Amount must be positive.");
@@ -86,12 +82,6 @@ public class CoffeeMachine {
         Logger.log("Added " + amount + "ml of water.");
     }
 
-    /**
-     * Добавляет молоко в кофемашину.
-     *
-     * @param amount Количество молока в миллилитрах
-     * @throws OverflowException Если количество молока превышает максимально допустимый уровень
-     */
     public static void addMilk(int amount) throws OverflowException {
         if (amount <= 0) {
             throw new IllegalArgumentException("Amount must be positive.");
@@ -103,12 +93,6 @@ public class CoffeeMachine {
         Logger.log("Added " + amount + "ml of milk.");
     }
 
-    /**
-     * Добавляет кофе в кофемашину.
-     *
-     * @param amount Количество кофе в граммах
-     * @throws OverflowException Если количество кофе превышает максимально допустимый уровень
-     */
     public static void addCoffeeBeans(int amount) throws OverflowException {
         if (amount <= 0) {
             throw new IllegalArgumentException("Amount must be positive.");
@@ -120,11 +104,6 @@ public class CoffeeMachine {
         Logger.log("Added " + amount + " grams of coffee beans.");
     }
 
-    /**
-     * Очищает кофемашину.
-     *
-     * @throws IllegalStateException Если кофемашина не требует очистки
-     */
     public static void cleanMachine() throws IllegalStateException {
         if (needsCleaning) {
             Logger.log("Machine cleaned.");
@@ -184,67 +163,26 @@ public class CoffeeMachine {
         coffeeBeans -= CAPPUCCINO_COFFEE_BEANS * cups;
     }
 
-    /**
-     * Добавляет профиль.
-     *
-     * @param name   Имя профиля
-     * @param drinks Напитки в профиле
-     */
-    public static void addProfile(String name, Map<DrinkType, Integer> drinks) {
-        Logger.log("Profile added: " + name + " with drinks " + drinks);
-    }
-
-    /**
-     * Получает рецепт напитка.
-     *
-     * @param type Тип напитка
-     * @return Рецепт напитка
-     */
     public static String getRecipe(DrinkType type) {
         return RECIPES.get(type);
     }
 
-    /**
-     * Возвращает уровень воды.
-     *
-     * @return Уровень воды
-     */
     public static int getWaterLevel() {
         return waterLevel;
     }
 
-    /**
-     * Возвращает уровень молока.
-     *
-     * @return Уровень молока
-     */
     public static int getMilkLevel() {
         return milkLevel;
     }
 
-    /**
-     * Возвращает количество кофе в машине.
-     *
-     * @return Количество кофе
-     */
     public static int getCoffeeBeans() {
         return coffeeBeans;
     }
 
-    /**
-     * Проверяет, включена ли кофемашина.
-     *
-     * @return true, если включена; false в противном случае
-     */
     public static boolean isMachineOn() {
         return isOn;
     }
 
-    /**
-     * Проверяет, требует ли кофемашина очистки.
-     *
-     * @return true, если требуется очистка; false в противном случае
-     */
     public static boolean needsCleaning() {
         return needsCleaning;
     }
