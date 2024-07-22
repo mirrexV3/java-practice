@@ -7,7 +7,7 @@ import java.util.List;
  * Класс для логирования действий кофемашины.
  */
 public class Logger {
-    private static final List<String> LOGS = new ArrayList<>();
+    private static List<String> logs = new ArrayList<>();
 
     /**
      * Логирование сообщения.
@@ -15,7 +15,7 @@ public class Logger {
      * @param message Сообщение для логирования
      */
     public static void log(String message) {
-        LOGS.add(message);
+        logs.add(message);
         System.out.println("LOG: " + message);
     }
 
@@ -24,7 +24,7 @@ public class Logger {
      */
     public static void printLogs() {
         System.out.println("Logs:");
-        for (String log : LOGS) {
+        for (String log : logs) {
             System.out.println(log);
         }
     }
