@@ -1,16 +1,12 @@
 package dev.mirrex;
 
 import dev.mirrex.drink.DrinkType;
-import dev.mirrex.engine.CoffeeMachine;
 import dev.mirrex.exception.OverflowException;
 import dev.mirrex.logger.Logger;
-import dev.mirrex.utils.Utils;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-import static dev.mirrex.engine.CoffeeMachine.*;
 import static dev.mirrex.engine.CoffeeMachine.addCoffeeBeans;
 import static dev.mirrex.engine.CoffeeMachine.addMilk;
 import static dev.mirrex.engine.CoffeeMachine.addWater;
@@ -20,6 +16,8 @@ import static dev.mirrex.engine.CoffeeMachine.getMilkLevel;
 import static dev.mirrex.engine.CoffeeMachine.getProfiles;
 import static dev.mirrex.engine.CoffeeMachine.getRecipe;
 import static dev.mirrex.engine.CoffeeMachine.getWaterLevel;
+import static dev.mirrex.engine.CoffeeMachine.makeDrink;
+import static dev.mirrex.engine.CoffeeMachine.makeThreeCups;
 import static dev.mirrex.engine.CoffeeMachine.needsCleaning;
 import static dev.mirrex.engine.CoffeeMachine.setProfile;
 import static dev.mirrex.engine.CoffeeMachine.turnOff;
@@ -45,7 +43,7 @@ public class Application {
 
     static void showMenu() {
         System.out.println(
-                """ 
+                        """ 
                         1. Включить кофемашину
                         2. Выключить кофемашину
                         3. Добавить воду
