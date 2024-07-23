@@ -24,6 +24,7 @@ import static dev.mirrex.engine.CoffeeMachine.needsCleaning;
 import static dev.mirrex.engine.CoffeeMachine.setProfile;
 import static dev.mirrex.engine.CoffeeMachine.turnOff;
 import static dev.mirrex.engine.CoffeeMachine.turnOn;
+import static dev.mirrex.utils.Utils.isValidInput;
 
 public class Application {
 
@@ -44,7 +45,7 @@ public class Application {
 
     static void showMenu() {
         System.out.println(
-                        """ 
+                """ 
                         1. Включить кофемашину
                         2. Выключить кофемашину
                         3. Добавить воду
@@ -209,15 +210,14 @@ public class Application {
                     throw new OverflowException("Should be non negative and not be greater than drinks amount");
                 }
 
-                System.out.print("Количество кружек: ");
                 int cupAmount = SCANNER.nextInt();
-                if (cupAmount > 99 || cupAmount <= 0) {
+                System.out.print("Количество кружек: ");
+                if (cupAmount > 99 || cupAmount <= 0 || !isValidInput(SCANNER)) {
                     throw new OverflowException("Should be non negative and not be greater than 99");
                 }
                 DrinkType type = (drinkChoice == 1) ? DrinkType.ESPRESSO : DrinkType.CAPPUCCINO;
                 drinks.put(type, cupAmount);
             }
-
             setProfile(profileName);
             Logger.log("Profile added: " + profileName + " with drinks " + drinks);
             System.out.println("Профиль добавлен.");
@@ -226,7 +226,7 @@ public class Application {
 
     private static void printRecipe() throws OverflowException {
         System.out.print("Введите название напитка (1 - Эспрессо, 2 - Капучино): ");
-        if (Utils.isValidInput(SCANNER)) {
+        if (isValidInput(SCANNER)) {
             int drinkChoice = SCANNER.nextInt();
             DrinkType type = (drinkChoice == 1) ? DrinkType.ESPRESSO : DrinkType.CAPPUCCINO;
             String recipe = getRecipe(type);
