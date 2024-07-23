@@ -3,8 +3,6 @@ package dev.mirrex.engine;
 import dev.mirrex.drink.DrinkType;
 import dev.mirrex.exception.OverflowException;
 import dev.mirrex.logger.Logger;
-import dev.mirrex.utils.Utils;
-
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
@@ -13,6 +11,7 @@ import java.util.Scanner;
 import static dev.mirrex.drink.DrinkType.CAPPUCCINO;
 import static dev.mirrex.drink.DrinkType.ESPRESSO;
 import static dev.mirrex.drink.DrinkType.getRecipes;
+import static dev.mirrex.utils.Utils.isValidInput;
 
 public class CoffeeMachine {
 
@@ -118,44 +117,46 @@ public class CoffeeMachine {
             needsCleaning = false;
             dirtyCount = 0;
         } else {
-            throw new IllegalStateException("Machine does not need cleaning.");
+            System.out.println("Machine does not need cleaning.");
         }
     }
 
     public static void makeDrink() throws OverflowException, InputMismatchException {
         System.out.print("Какой напиток вы хотите приготовить? (1 - Эспрессо, 2 - Капучино): ");
-        if (Utils.isValidInput(SCANNER)) {
+        if (isValidInput(SCANNER)) {
             int drinkChoice = SCANNER.nextInt();
             if (drinkChoice <= 0 || drinkChoice > DrinkType.values().length) {
-                throw new OverflowException("Must be positive and in range numbers of drinks");
+                System.out.println("Must be positive and in range numbers of drinks");
             }
             System.out.print("Введите количество кружек: ");
-            int cups = SCANNER.nextInt();
-            DrinkType type = drinkChoice == 1 ? DrinkType.ESPRESSO : DrinkType.CAPPUCCINO;
-            validateMachineState(cups);
+            if (isValidInput(SCANNER)) {
+                int cups = SCANNER.nextInt();
+                DrinkType type = drinkChoice == 1 ? DrinkType.ESPRESSO : DrinkType.CAPPUCCINO;
+                validateMachineState(cups);
 
-            switch (type) {
-                case ESPRESSO:
-                    makeEspresso(cups);
-                    break;
-                case CAPPUCCINO:
-                    makeCappuccino(cups);
-                    break;
-                default:
-                    throw new IllegalArgumentException("Unknown drink type.");
+                switch (type) {
+                    case ESPRESSO:
+                        makeEspresso(cups);
+                        break;
+                    case CAPPUCCINO:
+                        makeCappuccino(cups);
+                        break;
+                    default:
+                        System.out.println("Unknown drink type.");
+                }
+
+                dirtyCount += cups;
+                Logger.log("Made " + cups + " cups of " + type + ".");
             }
-
-            dirtyCount += cups;
-            Logger.log("Made " + cups + " cups of " + type + ".");
         }
     }
 
     public static void makeThreeCups() throws OverflowException, InputMismatchException {
         System.out.print("Какой напиток вы хотите приготовить? (1 - Эспрессо, 2 - Капучино): ");
-        if (Utils.isValidInput(SCANNER)) {
+        if (isValidInput(SCANNER)) {
             int drinkChoice = SCANNER.nextInt();
             if (drinkChoice <= 0 || drinkChoice > DrinkType.values().length) {
-                throw new OverflowException("Must be positive and in range numbers of drinks");
+                System.out.println("Must be positive and in range numbers of drinks");
             }
             int cupsAmount = 3;
             DrinkType type = drinkChoice == 1 ? DrinkType.ESPRESSO : DrinkType.CAPPUCCINO;
@@ -169,7 +170,7 @@ public class CoffeeMachine {
                     makeCappuccino(3);
                     break;
                 default:
-                    throw new IllegalArgumentException("Unknown drink type.");
+                    System.out.println("Unknown drink type.");
             }
 
             dirtyCount += cupsAmount;
