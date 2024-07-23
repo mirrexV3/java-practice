@@ -9,7 +9,7 @@ public class Utils {
         if (!input.hasNextInt()) {
             throw new OverflowException(
                     """
-                    Invalid input. Try again. Only positive numbers are allowed.
+                    Invalid input. Try again. Only positive numbers are allowed and/or inclusive in range.
                     """);
         }
         return true;

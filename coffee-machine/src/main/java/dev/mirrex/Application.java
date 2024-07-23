@@ -226,7 +226,9 @@ public class Application {
 
     private static void printRecipe() throws OverflowException {
         System.out.print("Введите название напитка (1 - Эспрессо, 2 - Капучино): ");
-        if (isValidInput(SCANNER)) {
+        if (!isValidInput(SCANNER)) {
+            throw new OverflowException("The selection must correspond to the drink number");
+        } else {
             int drinkChoice = SCANNER.nextInt();
             DrinkType type = (drinkChoice == 1) ? DrinkType.ESPRESSO : DrinkType.CAPPUCCINO;
             String recipe = getRecipe(type);
