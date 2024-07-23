@@ -95,45 +95,23 @@ public class Application {
 
     private static void handleBasicChoices(int choice) throws OverflowException {
         switch (choice) {
-            case 1:
-                turnOn();
-                break;
-            case 2:
-                turnOff();
-                break;
-            case 3:
-                addWater();
-                break;
-            case 4:
-                addCoffeeBeans();
-                break;
-            case 5:
-                addMilk();
-                break;
-            default:
-                System.out.println("Некорректный выбор. Попробуйте еще раз.");
+            case 1 -> turnOn();
+            case 2 -> turnOff();
+            case 3 -> addWater();
+            case 4 -> addCoffeeBeans();
+            case 5 -> addMilk();
+            default -> System.out.println("Некорректный выбор. Попробуйте еще раз.");
         }
     }
 
     private static void handleStatusChoices(int choice) {
         switch (choice) {
-            case 6:
-                checkMilkLevel();
-                break;
-            case 7:
-                checkWaterLevel();
-                break;
-            case 8:
-                checkCoffeeBeans();
-                break;
-            case 9:
-                checkCleaningStatus();
-                break;
-            case 10:
-                cleanMachine();
-                break;
-            default:
-                System.out.println("Некорректный выбор. Попробуйте еще раз.");
+            case 6 -> checkMilkLevel();
+            case 7 -> checkWaterLevel();
+            case 8 -> checkCoffeeBeans();
+            case 9 -> checkCleaningStatus();
+            case 10 -> cleanMachine();
+            default -> System.out.println("Некорректный выбор. Попробуйте еще раз.");
         }
     }
 
@@ -141,24 +119,16 @@ public class Application {
         switch (choice) {
             case 11, 13 -> makeDrink();
             case 12 -> makeThreeCups();
-
             default -> System.out.println("Некорректный выбор. Попробуйте еще раз.");
         }
     }
 
     private static void handleProfileAndLogsChoices(int choice) throws OverflowException {
         switch (choice) {
-            case 14:
-                printLogs();
-                break;
-            case 15:
-                addProfile();
-                break;
-            case 16:
-                printRecipe();
-                break;
-            default:
-                System.out.println("Некорректный выбор. Попробуйте еще раз.");
+            case 14 -> printLogs();
+            case 15 -> addProfile();
+            case 16 -> printRecipe();
+            default -> System.out.println("Некорректный выбор. Попробуйте еще раз.");
         }
     }
 

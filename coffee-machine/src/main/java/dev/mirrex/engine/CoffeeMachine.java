@@ -135,14 +135,9 @@ public class CoffeeMachine {
                 validateMachineState(cups);
 
                 switch (type) {
-                    case ESPRESSO:
-                        makeEspresso(cups);
-                        break;
-                    case CAPPUCCINO:
-                        makeCappuccino(cups);
-                        break;
-                    default:
-                        System.out.println("Unknown drink type.");
+                    case ESPRESSO -> makeEspresso(cups);
+                    case CAPPUCCINO -> makeCappuccino(cups);
+                    default -> System.out.println("Unknown drink type.");
                 }
 
                 dirtyCount += cups;
@@ -163,14 +158,9 @@ public class CoffeeMachine {
             validateMachineState(cupsAmount);
 
             switch (type) {
-                case ESPRESSO:
-                    makeEspresso(3);
-                    break;
-                case CAPPUCCINO:
-                    makeCappuccino(3);
-                    break;
-                default:
-                    System.out.println("Unknown drink type.");
+                case ESPRESSO -> makeEspresso(3);
+                case CAPPUCCINO -> makeCappuccino(3);
+                default -> System.out.println("Unknown drink type.");
             }
 
             dirtyCount += cupsAmount;
