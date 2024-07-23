@@ -224,10 +224,6 @@ public class CoffeeMachine {
         return coffeeBeans;
     }
 
-    public static boolean isMachineOn() {
-        return isOn;
-    }
-
     public static boolean needsCleaning() {
         return needsCleaning;
     }
@@ -246,9 +242,5 @@ public class CoffeeMachine {
 
     public static int getMaxMilkCapacity() {
         return MAX_MILK_CAPACITY;
-    }
-
-    public static int getDirtyCount() {
-        return dirtyCount;
     }
 }
