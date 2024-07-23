@@ -3,14 +3,15 @@ package dev.mirrex.engine;
 import dev.mirrex.drink.DrinkType;
 import dev.mirrex.exception.OverflowException;
 import dev.mirrex.logger.Logger;
-import java.util.ArrayList;
-import java.util.List;
+import dev.mirrex.utils.Utils;
 
-import static dev.mirrex.drink.DrinkType.getCappuccinoCoffeeBeans;
-import static dev.mirrex.drink.DrinkType.getCappuccinoMilk;
-import static dev.mirrex.drink.DrinkType.getCappuccinoWater;
-import static dev.mirrex.drink.DrinkType.getEspressoCoffeeBeans;
-import static dev.mirrex.drink.DrinkType.getEspressoWater;
+import java.util.ArrayList;
+import java.util.InputMismatchException;
+import java.util.List;
+import java.util.Scanner;
+
+import static dev.mirrex.drink.DrinkType.CAPPUCCINO;
+import static dev.mirrex.drink.DrinkType.ESPRESSO;
 import static dev.mirrex.drink.DrinkType.getRecipes;
 
 public class CoffeeMachine {
@@ -37,6 +38,8 @@ public class CoffeeMachine {
 
     private static final List<String> profiles = new ArrayList<>();
 
+    private static final Scanner SCANNER = new Scanner(System.in);
+
     public static List<String> getProfiles() {
         return profiles;
     }
@@ -55,9 +58,16 @@ public class CoffeeMachine {
         Logger.log("Coffee machine turned off.");
     }
 
-    public static void addWater(int amount) throws OverflowException {
+    public static void addWater() throws OverflowException {
+        System.out.print("Введите количество воды (мл): ");
+
+        if (!SCANNER.hasNextInt()) {
+            throw new OverflowException("Amount must be number.");
+        }
+
+        int amount = SCANNER.nextInt();
         if (amount <= 0) {
-            throw new IllegalArgumentException("Amount must be positive.");
+            throw new OverflowException("Amount must be positive.");
         }
         if (waterLevel + amount > getMaxWaterCapacity()) {
             throw new OverflowException("Water overflow.");
@@ -66,9 +76,16 @@ public class CoffeeMachine {
         Logger.log("Added " + amount + "ml of water.");
     }
 
-    public static void addMilk(int amount) throws OverflowException {
+    public static void addMilk() throws OverflowException {
+        System.out.print("Введите количество молока (мл): ");
+
+        if (!SCANNER.hasNextInt()) {
+            throw new OverflowException("Amount must be number.");
+        }
+
+        int amount = SCANNER.nextInt();
         if (amount <= 0) {
-            throw new IllegalArgumentException("Amount must be positive.");
+            throw new OverflowException("Amount must be positive.");
         }
         if (milkLevel + amount > getMaxMilkCapacity()) {
             throw new OverflowException("Milk overflow.");
@@ -77,9 +94,16 @@ public class CoffeeMachine {
         Logger.log("Added " + amount + "ml of milk.");
     }
 
-    public static void addCoffeeBeans(int amount) throws OverflowException {
+    public static void addCoffeeBeans() throws OverflowException {
+        System.out.print("Введите количество кофе (г): ");
+
+        if (!SCANNER.hasNextInt()) {
+            throw new OverflowException("Amount must be number.");
+        }
+
+        int amount = SCANNER.nextInt();
         if (amount <= 0) {
-            throw new IllegalArgumentException("Amount must be positive.");
+            throw new OverflowException("Amount must be positive.");
         }
         if (coffeeBeans + amount > getMaxCoffeeBeans()) {
             throw new OverflowException("Coffee beans overflow.");
@@ -98,22 +122,59 @@ public class CoffeeMachine {
         }
     }
 
-    public static void makeDrink(DrinkType type, int cups) {
-        validateMachineState(cups);
+    public static void makeDrink() throws OverflowException, InputMismatchException {
+        System.out.print("Какой напиток вы хотите приготовить? (1 - Эспрессо, 2 - Капучино): ");
+        if (Utils.isValidInput(SCANNER)) {
+            int drinkChoice = SCANNER.nextInt();
+            if (drinkChoice <= 0 || drinkChoice > DrinkType.values().length) {
+                throw new OverflowException("Must be positive and in range numbers of drinks");
+            }
+            System.out.print("Введите количество кружек: ");
+            int cups = SCANNER.nextInt();
+            DrinkType type = drinkChoice == 1 ? DrinkType.ESPRESSO : DrinkType.CAPPUCCINO;
+            validateMachineState(cups);
 
-        switch (type) {
-            case ESPRESSO:
-                makeEspresso(cups);
-                break;
-            case CAPPUCCINO:
-                makeCappuccino(cups);
-                break;
-            default:
-                throw new IllegalArgumentException("Unknown drink type.");
+            switch (type) {
+                case ESPRESSO:
+                    makeEspresso(cups);
+                    break;
+                case CAPPUCCINO:
+                    makeCappuccino(cups);
+                    break;
+                default:
+                    throw new IllegalArgumentException("Unknown drink type.");
+            }
+
+            dirtyCount += cups;
+            Logger.log("Made " + cups + " cups of " + type + ".");
         }
+    }
 
-        dirtyCount += cups;
-        Logger.log("Made " + cups + " cups of " + type + ".");
+    public static void makeThreeCups() throws OverflowException, InputMismatchException {
+        System.out.print("Какой напиток вы хотите приготовить? (1 - Эспрессо, 2 - Капучино): ");
+        if (Utils.isValidInput(SCANNER)) {
+            int drinkChoice = SCANNER.nextInt();
+            if (drinkChoice <= 0 || drinkChoice > DrinkType.values().length) {
+                throw new OverflowException("Must be positive and in range numbers of drinks");
+            }
+            int cupsAmount = 3;
+            DrinkType type = drinkChoice == 1 ? DrinkType.ESPRESSO : DrinkType.CAPPUCCINO;
+            validateMachineState(cupsAmount);
+
+            switch (type) {
+                case ESPRESSO:
+                    makeEspresso(3);
+                    break;
+                case CAPPUCCINO:
+                    makeCappuccino(3);
+                    break;
+                default:
+                    throw new IllegalArgumentException("Unknown drink type.");
+            }
+
+            dirtyCount += cupsAmount;
+            Logger.log("Made " + cupsAmount + " cups of " + type + ".");
+        }
     }
 
     private static void validateMachineState(int cups) {
@@ -123,28 +184,28 @@ public class CoffeeMachine {
         if (cups <= 0) {
             throw new IllegalArgumentException("Number of cups must be positive.");
         }
-        if (dirtyCount >= getMaxCleanLimit()) {
+        if (CoffeeMachine.dirtyCount >= getMaxCleanLimit()) {
             needsCleaning = true;
             throw new IllegalStateException("Machine needs cleaning.");
         }
     }
 
-    private static void makeEspresso(int cups) throws IllegalArgumentException {
-        if (waterLevel < getEspressoWater() * cups || coffeeBeans < getEspressoCoffeeBeans() * cups) {
-            throw new IllegalArgumentException("Not enough ingredients for Espresso.");
+    private static void makeEspresso(int cups) throws IllegalArgumentException, OverflowException {
+        if (waterLevel < ESPRESSO.getWater() * cups || coffeeBeans < ESPRESSO.getCoffeeBeans() * cups) {
+            throw new OverflowException("Not enough ingredients for Espresso.");
         }
-        waterLevel -= getEspressoWater() * cups;
-        coffeeBeans -= getEspressoCoffeeBeans() * cups;
+        waterLevel -= ESPRESSO.getWater() * cups;
+        coffeeBeans -= ESPRESSO.getCoffeeBeans() * cups;
     }
 
-    private static void makeCappuccino(int cups) throws IllegalArgumentException {
-        if (waterLevel < getCappuccinoWater() * cups || milkLevel < getCappuccinoMilk() *
-                cups || coffeeBeans < getCappuccinoCoffeeBeans() * cups) {
-            throw new IllegalArgumentException("Not enough ingredients for Cappuccino.");
+    private static void makeCappuccino(int cups) throws IllegalArgumentException, OverflowException {
+        if (waterLevel < CAPPUCCINO.getWater() * cups || milkLevel < CAPPUCCINO.getMilk() *
+                cups || coffeeBeans < CAPPUCCINO.getCoffeeBeans() * cups) {
+            throw new OverflowException("Not enough ingredients for Cappuccino.");
         }
-        waterLevel -= getCappuccinoWater() * cups;
-        milkLevel -= getCappuccinoMilk() * cups;
-        coffeeBeans -= getCappuccinoCoffeeBeans() * cups;
+        waterLevel -= CAPPUCCINO.getWater() * cups;
+        milkLevel -= CAPPUCCINO.getMilk() * cups;
+        coffeeBeans -= CAPPUCCINO.getCoffeeBeans() * cups;
     }
 
     public static String getRecipe(DrinkType type) {
@@ -190,5 +251,4 @@ public class CoffeeMachine {
     public static int getDirtyCount() {
         return dirtyCount;
     }
-
 }

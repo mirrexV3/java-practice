@@ -4,48 +4,42 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum DrinkType {
-    ESPRESSO, CAPPUCCINO;
-
-    private static final int ESPRESSO_WATER = 50;
-
-    private static final int ESPRESSO_COFFEE_BEANS = 10;
-
-    private static final int CAPPUCCINO_WATER = 100;
-
-    private static final int CAPPUCCINO_MILK = 50;
-
-    private static final int CAPPUCCINO_COFFEE_BEANS = 15;
+    ESPRESSO(50, 10, 0), CAPPUCCINO(100, 50, 15);
 
     private static final Map<DrinkType, String> RECIPES = new HashMap<>();
+
+    private final int milk;
+
+    private final int coffeeBeans;
+
+    private final int water;
+
+    DrinkType(int milk, int coffeeBeans, int water) {
+        this.milk = milk;
+        this.coffeeBeans = coffeeBeans;
+        this.water = water;
+    }
 
     public static Map<DrinkType, String> getRecipes() {
         return RECIPES;
     }
 
     static {
-        RECIPES.put(DrinkType.ESPRESSO, "Espresso Recipe: " + getEspressoWater() + "ml water, " +
-                " " + getEspressoCoffeeBeans() + "g coffee beans.");
-        RECIPES.put(DrinkType.CAPPUCCINO, "Cappuccino Recipe: " + getCappuccinoWater() + "ml water, " +
-                " " + getCappuccinoMilk() + "ml milk, " + getCappuccinoCoffeeBeans() + "g coffee beans.");
+        RECIPES.put(DrinkType.ESPRESSO, "Espresso Recipe: " + ESPRESSO.water + "ml water, " +
+                " " + ESPRESSO.coffeeBeans + "g coffee beans, " + ESPRESSO.milk + "ml milk.");
+        RECIPES.put(DrinkType.CAPPUCCINO, "Cappuccino Recipe: " + CAPPUCCINO.water + "ml water, " +
+                " " + CAPPUCCINO.milk + "ml milk, " + CAPPUCCINO.coffeeBeans + "g coffee beans.");
     }
 
-    public static int getCappuccinoCoffeeBeans() {
-        return CAPPUCCINO_COFFEE_BEANS;
+    public int getCoffeeBeans() {
+        return coffeeBeans;
     }
 
-    public static int getCappuccinoMilk() {
-        return CAPPUCCINO_MILK;
+    public int getMilk() {
+        return milk;
     }
 
-    public static int getCappuccinoWater() {
-        return CAPPUCCINO_WATER;
-    }
-
-    public static int getEspressoCoffeeBeans() {
-        return ESPRESSO_COFFEE_BEANS;
-    }
-
-    public static int getEspressoWater() {
-        return ESPRESSO_WATER;
+    public int getWater() {
+        return water;
     }
 }

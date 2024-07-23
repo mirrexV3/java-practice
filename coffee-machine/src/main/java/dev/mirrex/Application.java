@@ -4,77 +4,109 @@ import dev.mirrex.drink.DrinkType;
 import dev.mirrex.engine.CoffeeMachine;
 import dev.mirrex.exception.OverflowException;
 import dev.mirrex.logger.Logger;
+import dev.mirrex.utils.Utils;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+
+import static dev.mirrex.engine.CoffeeMachine.*;
+import static dev.mirrex.engine.CoffeeMachine.addCoffeeBeans;
+import static dev.mirrex.engine.CoffeeMachine.addMilk;
+import static dev.mirrex.engine.CoffeeMachine.addWater;
+import static dev.mirrex.engine.CoffeeMachine.cleanMachine;
+import static dev.mirrex.engine.CoffeeMachine.getCoffeeBeans;
+import static dev.mirrex.engine.CoffeeMachine.getMilkLevel;
+import static dev.mirrex.engine.CoffeeMachine.getProfiles;
+import static dev.mirrex.engine.CoffeeMachine.getRecipe;
+import static dev.mirrex.engine.CoffeeMachine.getWaterLevel;
+import static dev.mirrex.engine.CoffeeMachine.needsCleaning;
+import static dev.mirrex.engine.CoffeeMachine.setProfile;
+import static dev.mirrex.engine.CoffeeMachine.turnOff;
+import static dev.mirrex.engine.CoffeeMachine.turnOn;
 
 public class Application {
 
     private static final Scanner SCANNER = new Scanner(System.in);
 
     public static void main(String[] args) {
-        while (true) {
-            showMenu();
-            int choice = getChoice();
-            handleChoice(choice);
+        try {
+            while (true) {
+                showMenu();
+                int choice = getChoice();
+                handleChoice(choice);
+            }
+
+        } catch (OverflowException | IllegalArgumentException | IllegalStateException e) {
+            System.out.println(e.getMessage());
         }
     }
 
     static void showMenu() {
-        System.out.println("1. Включить кофемашину");
-        System.out.println("2. Выключить кофемашину");
-        System.out.println("3. Добавить воду");
-        System.out.println("4. Добавить кофе");
-        System.out.println("5. Добавить молоко");
-        System.out.println("6. Проверить уровень молока");
-        System.out.println("7. Проверить уровень воды");
-        System.out.println("8. Проверить количество кофе");
-        System.out.println("9. Проверить статус очистки");
-        System.out.println("10. Очистить кофемашину");
-        System.out.println("11. Сделать эспрессо");
-        System.out.println("12. Сделать капучино");
-        System.out.println("13. Сделать три кружки напитка");
-        System.out.println("14. Сделать кастомное количество кружек напитка");
-        System.out.println("15. Печать логов");
-        System.out.println("16. Добавить профиль");
-        System.out.println("17. Печать рецепта напитка");
-        System.out.println("18. Выход");
+        System.out.println(
+                        """ 
+                        1. Включить кофемашину
+                        2. Выключить кофемашину
+                        3. Добавить воду
+                        4. Добавить кофе
+                        5. Добавить молоко
+                        6. Проверить уровень молока
+                        7. Проверить уровень воды
+                        8. Проверить количество кофе
+                        9. Проверить статус очистки
+                        10. Очистить кофемашину
+                        11. Сделать напиток
+                        12. Сделать три кружки напитка
+                        13. Сделать кастомное количество кружек напитка
+                        14. Печать логов
+                        15. Добавить профиль
+                        16. Печать рецепта напитка
+                        17. Выход
+                        """);
     }
 
     private static int getChoice() {
+        Scanner sc = new Scanner(System.in);
+        int choice;
         System.out.print("Введите ваш выбор: ");
-        return SCANNER.nextInt();
+        while (!sc.hasNextInt()) {
+            System.out.println("That's not a number!");
+            System.out.print("Пожалуйста, введите ваш выбор повторно: ");
+            sc.next();
+        }
+        choice = sc.nextInt();
+        return choice;
     }
 
-    private static void handleChoice(int choice) {
+    private static void handleChoice(int choice) throws OverflowException {
         if (choice >= 1 && choice <= 5) {
             handleBasicChoices(choice);
         } else if (choice >= 6 && choice <= 10) {
             handleStatusChoices(choice);
-        } else if (choice >= 11 && choice <= 14) {
+        } else if (choice >= 11 && choice <= 13) {
             handleDrinkChoices(choice);
-        } else if (choice >= 15 && choice <= 17) {
+        } else if (choice >= 14 && choice <= 16) {
             handleProfileAndLogsChoices(choice);
-        } else if (choice == 18) {
+        } else if (choice == 17) {
             System.exit(0);
         } else {
             System.out.println("Некорректный выбор. Попробуйте еще раз.");
         }
     }
 
-    private static void handleBasicChoices(int choice) {
+    private static void handleBasicChoices(int choice) throws OverflowException {
         switch (choice) {
             case 1:
-                CoffeeMachine.turnOn();
+                turnOn();
                 break;
             case 2:
-                CoffeeMachine.turnOff();
+                turnOff();
                 break;
             case 3:
                 addWater();
                 break;
             case 4:
-                addCoffee();
+                addCoffeeBeans();
                 break;
             case 5:
                 addMilk();
@@ -106,34 +138,24 @@ public class Application {
         }
     }
 
-    private static void handleDrinkChoices(int choice) {
+    private static void handleDrinkChoices(int choice) throws OverflowException {
         switch (choice) {
-            case 11:
-                makeEspresso();
-                break;
-            case 12:
-                makeCappuccino();
-                break;
-            case 13:
-                makeThreeCups();
-                break;
-            case 14:
-                makeCustomCups();
-                break;
-            default:
-                System.out.println("Некорректный выбор. Попробуйте еще раз.");
+            case 11, 13 -> makeDrink();
+            case 12 -> makeThreeCups();
+
+            default -> System.out.println("Некорректный выбор. Попробуйте еще раз.");
         }
     }
 
-    private static void handleProfileAndLogsChoices(int choice) {
+    private static void handleProfileAndLogsChoices(int choice) throws OverflowException {
         switch (choice) {
-            case 15:
+            case 14:
                 printLogs();
                 break;
-            case 16:
+            case 15:
                 addProfile();
                 break;
-            case 17:
+            case 16:
                 printRecipe();
                 break;
             default:
@@ -141,101 +163,23 @@ public class Application {
         }
     }
 
-    private static void addWater() {
-        System.out.print("Введите количество воды (мл): ");
-        int amount = SCANNER.nextInt();
-        try {
-            CoffeeMachine.addWater(amount);
-        } catch (OverflowException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    private static void addCoffee() {
-        System.out.print("Введите количество кофе (г): ");
-        int amount = SCANNER.nextInt();
-        try {
-            CoffeeMachine.addCoffeeBeans(amount);
-        } catch (OverflowException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    private static void addMilk() {
-        System.out.print("Введите количество молока (мл): ");
-        int amount = SCANNER.nextInt();
-        try {
-            CoffeeMachine.addMilk(amount);
-        } catch (OverflowException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
     private static void checkMilkLevel() {
-        System.out.println("Уровень молока: " + CoffeeMachine.getMilkLevel() + " мл");
+        System.out.println("Уровень молока: " + getMilkLevel() + " мл");
     }
 
     private static void checkWaterLevel() {
-        System.out.println("Уровень воды: " + CoffeeMachine.getWaterLevel() + " мл");
+        System.out.println("Уровень воды: " + getWaterLevel() + " мл");
     }
 
     private static void checkCoffeeBeans() {
-        System.out.println("Кофе в машине: " + CoffeeMachine.getCoffeeBeans() + " г");
+        System.out.println("Кофе в машине: " + getCoffeeBeans() + " г");
     }
 
     private static void checkCleaningStatus() {
-        if (CoffeeMachine.needsCleaning()) {
+        if (needsCleaning()) {
             System.out.println("Кофемашине требуется очистка.");
         } else {
             System.out.println("Кофемашина чиста.");
-        }
-    }
-
-    private static void cleanMachine() {
-        try {
-            CoffeeMachine.cleanMachine();
-        } catch (IllegalStateException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    private static void makeEspresso() {
-        try {
-            CoffeeMachine.makeDrink(DrinkType.ESPRESSO, 1);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    private static void makeCappuccino() {
-        try {
-            CoffeeMachine.makeDrink(DrinkType.CAPPUCCINO, 1);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    private static void makeThreeCups() {
-        System.out.print("Какой напиток вы хотите приготовить? (1 - Эспрессо, 2 - Капучино): ");
-        int drinkChoice = SCANNER.nextInt();
-        DrinkType type = (drinkChoice == 1) ? DrinkType.ESPRESSO : DrinkType.CAPPUCCINO;
-        try {
-            CoffeeMachine.makeDrink(type, 3);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    private static void makeCustomCups() {
-        System.out.print("Какой напиток вы хотите приготовить? (1 - Эспрессо, 2 - Капучино): ");
-        int drinkChoice = SCANNER.nextInt();
-        DrinkType type = (drinkChoice == 1) ? DrinkType.ESPRESSO : DrinkType.CAPPUCCINO;
-        System.out.print("Введите количество кружек: ");
-        int cups = SCANNER.nextInt();
-        try {
-            CoffeeMachine.makeDrink(type, cups);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
         }
     }
 
@@ -243,35 +187,50 @@ public class Application {
         Logger.printLogs();
     }
 
-    private static void addProfile() {
+    private static void addProfile() throws OverflowException {
         System.out.print("Введите имя профиля: ");
         String profileName = SCANNER.next();
+        int drinksAmount = DrinkType.values().length;
 
-        if (CoffeeMachine.getProfiles().contains(profileName)) {
+        if (getProfiles().contains(profileName)) {
             System.out.println("Профиль уже существует");
         } else {
             Map<DrinkType, Integer> drinks = new HashMap<>();
             System.out.println("Введите напитки для профиля (1 - Эспрессо, 2 - Капучино):");
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < drinksAmount; i++) {
                 System.out.print("Напиток " + (i + 1) + ": ");
+
+                if (!SCANNER.hasNextInt()) {
+                    throw new OverflowException("The selection must correspond to the drink number");
+                }
+
                 int drinkChoice = SCANNER.nextInt();
-                DrinkType type = (drinkChoice == 1) ? DrinkType.ESPRESSO : DrinkType.CAPPUCCINO;
+                if (drinkChoice <= 0 || drinkChoice > drinksAmount) {
+                    throw new OverflowException("Should be non negative and not be greater than drinks amount");
+                }
+
                 System.out.print("Количество кружек: ");
-                int cups = SCANNER.nextInt();
-                drinks.put(type, cups);
+                int cupAmount = SCANNER.nextInt();
+                if (cupAmount > 99 || cupAmount <= 0) {
+                    throw new OverflowException("Should be non negative and not be greater than 99");
+                }
+                DrinkType type = (drinkChoice == 1) ? DrinkType.ESPRESSO : DrinkType.CAPPUCCINO;
+                drinks.put(type, cupAmount);
             }
 
-            CoffeeMachine.setProfile(profileName);
+            setProfile(profileName);
             Logger.log("Profile added: " + profileName + " with drinks " + drinks);
             System.out.println("Профиль добавлен.");
         }
     }
 
-    private static void printRecipe() {
+    private static void printRecipe() throws OverflowException {
         System.out.print("Введите название напитка (1 - Эспрессо, 2 - Капучино): ");
-        int drinkChoice = SCANNER.nextInt();
-        DrinkType type = (drinkChoice == 1) ? DrinkType.ESPRESSO : DrinkType.CAPPUCCINO;
-        String recipe = CoffeeMachine.getRecipe(type);
-        System.out.println("Рецепт: " + recipe);
+        if (Utils.isValidInput(SCANNER)) {
+            int drinkChoice = SCANNER.nextInt();
+            DrinkType type = (drinkChoice == 1) ? DrinkType.ESPRESSO : DrinkType.CAPPUCCINO;
+            String recipe = getRecipe(type);
+            System.out.println("Рецепт: " + recipe);
+        }
     }
 }
